@@ -1,0 +1,12 @@
+{
+	"name": "azure_sql_LS_Lokesh",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "azure_sql_LS_Lokesh",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "AzureSqlTable",
+		"schema": []
+	}
+}
