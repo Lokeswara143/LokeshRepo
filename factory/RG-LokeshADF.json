@@ -1,0 +1,9 @@
+{
+	"name": "RG-LokeshADF",
+	"location": "eastus",
+	"identity": {
+		"type": "SystemAssigned",
+		"principalId": "611db8db-be09-437c-8ac7-de6790174a6b",
+		"tenantId": "361ac3b2-fea4-47a4-a90c-249f7cc69e06"
+	}
+}
