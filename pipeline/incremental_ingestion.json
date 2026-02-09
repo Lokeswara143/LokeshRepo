@@ -68,7 +68,10 @@
 						"type": "DatasetReference",
 						"parameters": {
 							"Container": "bronze",
-							"Folder": "users",
+							"Folder": {
+								"value": "@pipeline().parameters.table",
+								"type": "Expression"
+							},
 							"File": {
 								"value": "@concat(pipeline().parameters.table,'_',variables('current'))",
 								"type": "Expression"
@@ -172,7 +175,7 @@
 										"File": "@concat(pipeline().parameters.table,'_',variables('current'))"
 									}
 								},
-								"enableLogging": true,
+								"enableLogging": false,
 								"storeSettings": {
 									"type": "AzureBlobStorageReadSettings",
 									"recursive": true,
