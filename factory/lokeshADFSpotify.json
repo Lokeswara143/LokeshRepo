@@ -1,0 +1,9 @@
+{
+	"name": "lokeshADFSpotify",
+	"location": "eastus",
+	"identity": {
+		"type": "SystemAssigned",
+		"principalId": "b6bc2b8d-0a66-48c4-bb9d-fa58dcdb65f4",
+		"tenantId": "91839db2-c075-48fb-a5b0-2baf2dea5a60"
+	}
+}
