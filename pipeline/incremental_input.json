@@ -179,10 +179,13 @@
 												"parameters": {
 													"Container": "bronze",
 													"Folder": {
-														"value": "@pipeline().parameters.table",
+														"value": "@{item().table}",
 														"type": "Expression"
 													},
-													"File": "@concat(pipeline().parameters.table,'_',variables('current'))"
+													"File": {
+														"value": "@concat(item().table,'_',variables('current'))",
+														"type": "Expression"
+													}
 												}
 											},
 											"enableLogging": false,
