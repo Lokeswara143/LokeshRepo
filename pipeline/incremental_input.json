@@ -8,6 +8,10 @@
 				"dependsOn": [],
 				"userProperties": [],
 				"typeProperties": {
+					"items": {
+						"value": "@pipeline().parameters.loop_input",
+						"type": "Expression"
+					},
 					"activities": [
 						{
 							"name": "AzureSqlToLake",
@@ -143,7 +147,7 @@
 							}
 						},
 						{
-							"name": "If Condition1_copy1",
+							"name": "If Condition1",
 							"type": "IfCondition",
 							"dependsOn": [
 								{
