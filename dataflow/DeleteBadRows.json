@@ -22,7 +22,7 @@
 				},
 				{
 					"dataset": {
-						"referenceName": "ADFPractice_DS",
+						"referenceName": "AzureSqlTable1",
 						"type": "DatasetReference"
 					},
 					"name": "sink2"
@@ -77,21 +77,24 @@
 				"derivedColumn2 sink(allowSchemaDrift: true,",
 				"     validateSchema: false,",
 				"     input(",
-				"          sales_Date as string,",
-				"          {Sales Item} as string,",
-				"          Country as string,",
-				"          Quantity as string",
+				"          sales_date as date,",
+				"          sales_item as string,",
+				"          country as string,",
+				"          quantity as integer",
 				"     ),",
-				"     umask: 0022,",
-				"     preCommands: [],",
-				"     postCommands: [],",
+				"     deletable:false,",
+				"     insertable:true,",
+				"     updateable:false,",
+				"     upsertable:false,",
+				"     format: 'table',",
 				"     skipDuplicateMapInputs: true,",
 				"     skipDuplicateMapOutputs: true,",
+				"     errorHandlingOption: 'stopOnFirstError',",
 				"     mapColumn(",
-				"          sales_Date,",
-				"          {Sales Item},",
-				"          Country,",
-				"          Quantity",
+				"          sales_date = sales_Date,",
+				"          sales_item = {Sales Item},",
+				"          country = Country,",
+				"          quantity = Quantity",
 				"     )) ~> sink2"
 			]
 		}
