@@ -1,0 +1,99 @@
+{
+	"name": "DeleteBadRows",
+	"properties": {
+		"type": "MappingDataFlow",
+		"typeProperties": {
+			"sources": [
+				{
+					"dataset": {
+						"referenceName": "ADFPractice_DS",
+						"type": "DatasetReference"
+					},
+					"name": "source1"
+				}
+			],
+			"sinks": [
+				{
+					"dataset": {
+						"referenceName": "AzureSqlTable2",
+						"type": "DatasetReference"
+					},
+					"name": "sink1"
+				},
+				{
+					"dataset": {
+						"referenceName": "ADFPractice_DS",
+						"type": "DatasetReference"
+					},
+					"name": "sink2"
+				}
+			],
+			"transformations": [
+				{
+					"name": "split1"
+				},
+				{
+					"name": "derivedColumn1"
+				},
+				{
+					"name": "derivedColumn2"
+				}
+			],
+			"scriptLines": [
+				"source(output(",
+				"          sales_Date as string,",
+				"          {Sales Item} as string,",
+				"          Country as string,",
+				"          Quantity as string",
+				"     ),",
+				"     allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     ignoreNoFilesFound: false) ~> source1",
+				"source1 split(isNull(toDate(sales_Date, 'dd/MM/yyyy')),",
+				"     disjoint: false) ~> split1@(BadRows, GoodRows)",
+				"split1@BadRows derive(File_Name = 'LokeshSalesData') ~> derivedColumn1",
+				"split1@GoodRows derive(sales_Date = toDate(sales_Date, 'dd/MM/yyyy'),",
+				"          Quantity = toInteger(Quantity)) ~> derivedColumn2",
+				"derivedColumn1 sink(allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     input(",
+				"          sales_date as string,",
+				"          sales_item as string,",
+				"          country as string,",
+				"          quantity as string",
+				"     ),",
+				"     deletable:false,",
+				"     insertable:true,",
+				"     updateable:false,",
+				"     upsertable:false,",
+				"     format: 'table',",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true,",
+				"     errorHandlingOption: 'stopOnFirstError',",
+				"     mapColumn(",
+				"          sales_date = split1@BadRows@sales_Date,",
+				"          country = Country",
+				"     )) ~> sink1",
+				"derivedColumn2 sink(allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     input(",
+				"          sales_Date as string,",
+				"          {Sales Item} as string,",
+				"          Country as string,",
+				"          Quantity as string",
+				"     ),",
+				"     umask: 0022,",
+				"     preCommands: [],",
+				"     postCommands: [],",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true,",
+				"     mapColumn(",
+				"          sales_Date,",
+				"          {Sales Item},",
+				"          Country,",
+				"          Quantity",
+				"     )) ~> sink2"
+			]
+		}
+	}
+}
