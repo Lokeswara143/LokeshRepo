@@ -1,0 +1,69 @@
+{
+	"name": "FixedlengthDataflow",
+	"properties": {
+		"type": "MappingDataFlow",
+		"typeProperties": {
+			"sources": [
+				{
+					"dataset": {
+						"referenceName": "Fixed_Length_DS",
+						"type": "DatasetReference"
+					},
+					"name": "FixedLengthSource"
+				}
+			],
+			"sinks": [
+				{
+					"dataset": {
+						"referenceName": "Fixed_Length_Ouptut_DS",
+						"type": "DatasetReference"
+					},
+					"name": "sink1"
+				}
+			],
+			"transformations": [
+				{
+					"name": "derivedColumn1"
+				},
+				{
+					"name": "select1"
+				}
+			],
+			"scriptLines": [
+				"source(output(",
+				"          Col1 as string,",
+				"          {Sales Item} as string,",
+				"          Country as string,",
+				"          Quantity as string",
+				"     ),",
+				"     allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     ignoreNoFilesFound: false) ~> FixedLengthSource",
+				"FixedLengthSource derive(EMPID = substring(Col1,1,4),",
+				"          Contact = substring(Col1,16, 26),",
+				"          Name = substring(Col1,5,15)) ~> derivedColumn1",
+				"derivedColumn1 select(mapColumn(",
+				"          Col1,",
+				"          EMPID,",
+				"          Contact,",
+				"          Name",
+				"     ),",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true) ~> select1",
+				"select1 sink(allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     input(",
+				"          sales_Date as string,",
+				"          {Sales Item} as string,",
+				"          Country as string,",
+				"          Quantity as string",
+				"     ),",
+				"     umask: 0022,",
+				"     preCommands: [],",
+				"     postCommands: [],",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true) ~> sink1"
+			]
+		}
+	}
+}
